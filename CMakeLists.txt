@@ -34,15 +34,19 @@ set(PUBLIC_HEADER_FILES
 
 add_library(CarbonTrinityAudioAPI INTERFACE)
 
-target_include_directories(CarbonTrinityAudioAPI
-    INTERFACE
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
+target_include_directories(CarbonTrinityAudioAPI 
+    INTERFACE 
+    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 
-target_sources(CarbonTrinityAudioAPI
-    INTERFACE
-        ${PUBLIC_HEADER_FILES}
-)
+foreach(header ${PUBLIC_HEADER_FILES})
+    target_sources(CarbonTrinityAudioAPI 
+        INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${header}>
+        $<INSTALL_INTERFACE:${header}>
+    )
+endforeach()
 
 get_target_property(_SOURCES CarbonTrinityAudioAPI SOURCES)
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
@@ -51,7 +55,7 @@ source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
 # Provide an install target if this is the top level project only
-if(CMAKE_CarbonTrinityAudioAPI STREQUAL CarbonTrinityAudioAPI)
+if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
     # Determine if/when to generate/build documentation. The rules are as follows:
     # - If running locally - Build documentation is OFF by default
     # - If running on a build agent (TeamCity) - Build documentation is ON by default
