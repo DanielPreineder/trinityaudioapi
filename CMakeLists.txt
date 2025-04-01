@@ -123,7 +123,7 @@ if(CMAKE_CarbonTrinityAudioAPI STREQUAL CarbonTrinityAudioAPI)
             # Install rule to ensure that our runtime files are in the expected, platform-specific folder
             install(
                     TARGETS CarbonTrinityAudioAPI
-                    EXPORT CarbonTrinityAudioAPI Target
+                    EXPORT CarbonTrinityAudioAPITarget
                     CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
                     RUNTIME DESTINATION bin/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
             )
@@ -162,7 +162,7 @@ if(CMAKE_CarbonTrinityAudioAPI STREQUAL CarbonTrinityAudioAPI)
         install(FILES ${PUBLIC_HEADER_FILES} DESTINATION include)
 
         configure_ccp_vendor_config_file(
-                TARGET CarbonTrinityAudioAPI 
+                TARGET CarbonTrinityAudioAPI
                 DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/CarbonTrinityAudioAPIConfig.cmake"
                 DEPENDENCIES ""
         )

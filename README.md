@@ -12,7 +12,7 @@ To use this library in your project, add the following to your CMakeLists.txt:
 
 ```cmake
 find_package(CarbonTrinityAudioAPI REQUIRED)
-target_link_libraries(YourTarget PRIVATE CarbonTrinityAudioAPI)
+target_link_libraries(YourTarget INTERFACE CarbonTrinityAudioAPI)
 ```
 
 # Building the default project Locally
