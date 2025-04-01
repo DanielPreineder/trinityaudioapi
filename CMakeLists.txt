@@ -48,12 +48,6 @@ foreach(header ${PUBLIC_HEADER_FILES})
     )
 endforeach()
 
-get_target_property(_SOURCES CarbonTrinityAudioAPI SOURCES)
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
-        PREFIX "Sources"
-        FILES ${_SOURCES}
-)
-
 # Provide an install target if this is the top level project only
 if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
     # Determine if/when to generate/build documentation. The rules are as follows:
@@ -81,13 +75,13 @@ if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
         set(DOXYGEN_OUT_DIR ${DOCUMENTATION_OUT_DIR}/xml)
         set(DOXYGEN_INDEX_FILE ${DOXYGEN_OUT_DIR}/index.xml)
 
-        # Regenerate with source changes
+        # Regenerate with header-file changes
         add_custom_command(OUTPUT ${DOXYGEN_INDEX_FILE}
-                DEPENDS ${_SOURCES}
-                COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYFILE_OUT}
-                MAIN_DEPENDENCY ${DOXYFILE_OUT} ${DOXYFILE_IN}
-                COMMENT "Running Doxygen"
-                VERBATIM)
+        DEPENDS ${PUBLIC_HEADER_FILES}
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYFILE_OUT}
+        MAIN_DEPENDENCY ${DOXYFILE_OUT} ${DOXYFILE_IN}
+        COMMENT "Running Doxygen"
+        VERBATIM)
 
         add_custom_target(Doxygen ALL DEPENDS ${DOXYGEN_INDEX_FILE})
 
@@ -129,7 +123,6 @@ if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
                     TARGETS CarbonTrinityAudioAPI
                     EXPORT CarbonTrinityAudioAPITarget
                     CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
-                    RUNTIME DESTINATION bin/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
             )
         else()
             # Install rule to ensure that our runtime and linker files are in the expected, platform-specific folders
@@ -137,9 +130,6 @@ if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
                     TARGETS CarbonTrinityAudioAPI
                     EXPORT CarbonTrinityAudioAPITarget
                     CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
-                    LIBRARY DESTINATION lib/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
-                    ARCHIVE DESTINATION lib/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
-                    RUNTIME DESTINATION bin/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
             )
             # Install rule for available public headers
             install(DIRECTORY include DESTINATION . FILES_MATCHING PATTERN "*.h")
@@ -158,9 +148,6 @@ if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
                 TARGETS CarbonTrinityAudioAPI
                 EXPORT CarbonTrinityAudioAPITarget
                 CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
-                LIBRARY DESTINATION lib/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
-                ARCHIVE DESTINATION lib/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
-                RUNTIME DESTINATION bin/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
         )
         # Install rule for available public headers
         install(FILES ${PUBLIC_HEADER_FILES} DESTINATION include)
