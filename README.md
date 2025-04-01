@@ -8,14 +8,14 @@ Single source of truth for audio interfaces shared between Carbon Trinity and Ca
 - `include/IAudioInputMgr.h` - Interface for audio input management
 
 # Usage
-Including in your project, in your CMakeLists.txt:
+To use this library in your project, add the following to your CMakeLists.txt:
 
 ```cmake
-target_include_directories(YourTarget
-    PUBLIC
-        ${PATH_TO_CARBONAUDIOAPI}/include
-)
+find_package(CarbonTrinityAudioAPI REQUIRED)
+target_link_libraries(YourTarget PRIVATE CarbonTrinityAudioAPI)
 ```
+
+This will automatically set up all necessary include paths and dependencies.
 
 # Available Build Presets
 
