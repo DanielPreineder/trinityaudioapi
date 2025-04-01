@@ -102,20 +102,20 @@ if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
             set(CCP_PYTHON_INTERPRETER "${BRANCH_ROOT_DIR}/eve/client/pythonInterpreter.sh")
         endif()
 
-        # Run Sphinx against configuration file and Doxygen output
-        add_custom_target(Sphinx ALL
-                COMMAND ${CMAKE_COMMAND}
-                -E env
-                PYTHONPATH="$<TARGET_FILE_DIR:CarbonTrinityAudioAPI>\;${CMAKE_SOURCE_DIR}/python"
-                BUILDFLAVOR=$<LOWER_CASE:$<CONFIG>>
-                ${CCP_PYTHON_INTERPRETER}
-                -m sphinx build -E -b html
-                -Dbreathe_projects.doxygen=${DOXYGEN_OUT_DIR}
-                -c ${SPHINX_SOURCE}
-                ${SPHINX_SOURCE} ${SPHINX_BUILD}
-                WORKING_DIRECTORY ${BRANCH_ROOT_DIR}
-                DEPENDS ${DOXYGEN_INDEX_FILE}
-                COMMENT "Generating documentation with Sphinx")
+    # Run Sphinx against configuration file and Doxygen output
+    add_custom_target(Sphinx ALL
+            COMMAND ${CMAKE_COMMAND}
+            -E env
+            PYTHONPATH="${CMAKE_SOURCE_DIR}/python"
+            BUILDFLAVOR=$<LOWER_CASE:$<CONFIG>>
+            ${CCP_PYTHON_INTERPRETER}
+            -m sphinx build -E -b html
+            -Dbreathe_projects.doxygen=${DOXYGEN_OUT_DIR}
+            -c ${SPHINX_SOURCE}
+            ${SPHINX_SOURCE} ${SPHINX_BUILD}
+            WORKING_DIRECTORY ${BRANCH_ROOT_DIR}
+            DEPENDS ${DOXYGEN_INDEX_FILE}
+            COMMENT "Generating documentation with Sphinx")
 
         # Install rule for documentation
         install(DIRECTORY ${SPHINX_BUILD} DESTINATION documentation)
