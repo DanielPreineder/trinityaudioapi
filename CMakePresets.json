@@ -14,10 +14,14 @@
       "toolset": {
         "value": "v141"
       },
+      "environment": {
+        "INSTALL_PREFIX": "$env{CCP_EVE_PERFORCE_BRANCH_PATH}/vendor/github.com/ccpgames/carbon-trinity-audio-api/development"
+      },
       "cacheVariables": {
         "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/cmake/triplets",
         "VCPKG_TARGET_TRIPLET": "x64-windows-carbon",
-        "USE_VCPKG": "ON"
+        "USE_VCPKG": "ON",
+        "CMAKE_INSTALL_PREFIX": "$env{INSTALL_PREFIX}"
       }
     },
     {
@@ -25,10 +29,14 @@
       "toolchainFile": "${sourceDir}/vendor/github.com/microsoft/vcpkg/scripts/buildsystems/vcpkg.cmake",
       "binaryDir": "./.cmake-build-${generator}-${presetName}",
       "generator": "Ninja Multi-Config",
+      "environment": {
+        "INSTALL_PREFIX": "$env{CCP_EVE_PERFORCE_BRANCH_PATH}/vendor/github.com/ccpgames/carbon-trinity-audio-api/development"
+      },
       "cacheVariables": {
         "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/cmake/triplets",
         "VCPKG_TARGET_TRIPLET": "x64-windows-carbon",
-        "USE_VCPKG": "ON"
+        "USE_VCPKG": "ON",
+        "CMAKE_INSTALL_PREFIX": "$env{INSTALL_PREFIX}"
       }
     },
     {
@@ -36,10 +44,47 @@
       "toolchainFile": "${sourceDir}/vendor/github.com/microsoft/vcpkg/scripts/buildsystems/vcpkg.cmake",
       "binaryDir": "./.cmake-build-${generator}-${presetName}",
       "generator": "Ninja Multi-Config",
+      "environment": {
+        "INSTALL_PREFIX": "$env{CCP_EVE_PERFORCE_BRANCH_PATH}/vendor/github.com/ccpgames/carbon-trinity-audio-api/development"
+      },
       "cacheVariables": {
         "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/cmake/triplets",
         "VCPKG_TARGET_TRIPLET": "arm64-osx-carbon",
-        "USE_VCPKG": "ON"
+        "USE_VCPKG": "ON",
+        "CMAKE_INSTALL_PREFIX": "$env{INSTALL_PREFIX}"
+      }
+    },
+    {
+      "name": "windows_debug",
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "$env{CCP_EVE_PERFORCE_BRANCH_PATH}/vendor/github.com/ccpgames/carbon-trinity-audio-api/development",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "USE_VCPKG": "OFF"
+      }
+    },
+    {
+      "name": "windows_release",
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "$env{CCP_EVE_PERFORCE_BRANCH_PATH}/vendor/github.com/ccpgames/carbon-trinity-audio-api/development",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "USE_VCPKG": "OFF"
+      }
+    },
+    {
+      "name": "windows_internal",
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "$env{CCP_EVE_PERFORCE_BRANCH_PATH}/vendor/github.com/ccpgames/carbon-trinity-audio-api/development",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Internal",
+        "USE_VCPKG": "OFF"
       }
     }
   ]

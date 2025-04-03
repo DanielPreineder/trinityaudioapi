@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(project_name VERSION 1.0.0)
+project(CarbonTrinityAudioAPI VERSION 1.0.0)
 
 if(NOT DEFINED ENV{CCP_EVE_PERFORCE_BRANCH_PATH})
     message(FATAL_ERROR "Missing required environment variable CCP_EVE_PERFORCE_BRANCH_PATH")
@@ -25,18 +25,31 @@ else()
     include(CcpGlobalSettings)
     include(CcpPackageConfigHelpers)
 endif()
-ccp_add_library(project_name SHARED)
 
-get_target_property(_SOURCES project_name SOURCES)
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
-        PREFIX "Sources"
-        FILES ${_SOURCES}
+set(PUBLIC_HEADER_FILES
+    include/IAudioInputMgr.h
+    include/ITr2AudEmitter.h
+    include/ITr2Audio.h
 )
 
-set_target_properties(project_name PROPERTIES OUTPUT_NAME "_project_name")
+add_library(CarbonTrinityAudioAPI INTERFACE)
+
+target_include_directories(CarbonTrinityAudioAPI 
+    INTERFACE 
+    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+
+foreach(header ${PUBLIC_HEADER_FILES})
+    target_sources(CarbonTrinityAudioAPI 
+        INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${header}>
+        $<INSTALL_INTERFACE:${header}>
+    )
+endforeach()
 
 # Provide an install target if this is the top level project only
-if(CMAKE_PROJECT_NAME STREQUAL project_name)
+if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
     # Determine if/when to generate/build documentation. The rules are as follows:
     # - If running locally - Build documentation is OFF by default
     # - If running on a build agent (TeamCity) - Build documentation is ON by default
@@ -62,13 +75,13 @@ if(CMAKE_PROJECT_NAME STREQUAL project_name)
         set(DOXYGEN_OUT_DIR ${DOCUMENTATION_OUT_DIR}/xml)
         set(DOXYGEN_INDEX_FILE ${DOXYGEN_OUT_DIR}/index.xml)
 
-        # Regenerate with source changes
+        # Regenerate with header-file changes
         add_custom_command(OUTPUT ${DOXYGEN_INDEX_FILE}
-                DEPENDS ${_SOURCES}
-                COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYFILE_OUT}
-                MAIN_DEPENDENCY ${DOXYFILE_OUT} ${DOXYFILE_IN}
-                COMMENT "Running Doxygen"
-                VERBATIM)
+        DEPENDS ${PUBLIC_HEADER_FILES}
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYFILE_OUT}
+        MAIN_DEPENDENCY ${DOXYFILE_OUT} ${DOXYFILE_IN}
+        COMMENT "Running Doxygen"
+        VERBATIM)
 
         add_custom_target(Doxygen ALL DEPENDS ${DOXYGEN_INDEX_FILE})
 
@@ -87,7 +100,7 @@ if(CMAKE_PROJECT_NAME STREQUAL project_name)
         add_custom_target(Sphinx ALL
                 COMMAND ${CMAKE_COMMAND}
                 -E env
-                PYTHONPATH="$<TARGET_FILE_DIR:project_name>\;${CMAKE_SOURCE_DIR}/python"
+                PYTHONPATH="${CMAKE_SOURCE_DIR}/python"
                 BUILDFLAVOR=$<LOWER_CASE:$<CONFIG>>
                 ${CCP_PYTHON_INTERPRETER}
                 -m sphinx build -E -b html
@@ -107,51 +120,46 @@ if(CMAKE_PROJECT_NAME STREQUAL project_name)
         if(INSTALL_BIN_ONLY)
             # Install rule to ensure that our runtime files are in the expected, platform-specific folder
             install(
-                    TARGETS project_name
-                    EXPORT project_nameTarget
+                    TARGETS CarbonTrinityAudioAPI
+                    EXPORT CarbonTrinityAudioAPITarget
                     CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
-                    RUNTIME DESTINATION bin/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
             )
         else()
             # Install rule to ensure that our runtime and linker files are in the expected, platform-specific folders
             install(
-                    TARGETS project_name
-                    EXPORT project_nameTarget
+                    TARGETS CarbonTrinityAudioAPI
+                    EXPORT CarbonTrinityAudioAPITarget
                     CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
-                    LIBRARY DESTINATION lib/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
-                    ARCHIVE DESTINATION lib/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
-                    RUNTIME DESTINATION bin/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
             )
             # Install rule for available public headers
             install(DIRECTORY include DESTINATION . FILES_MATCHING PATTERN "*.h")
 
             install(
-                    EXPORT project_nameTarget
-                    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/project_name
-                    FILE project_name.cmake)
+                    EXPORT CarbonTrinityAudioAPITarget
+                    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/CarbonTrinityAudioAPI
+                    FILE CarbonTrinityAudioAPI.cmake)
             install(
-                    FILES project_nameConfig.cmake
-                    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/project_name)
+                    FILES CarbonTrinityAudioAPIConfig.cmake
+                    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/CarbonTrinityAudioAPI)
         endif()
     else()
             # Install rule to ensure that our runtime and linker files are in the expected, platform-specific folders
         install(
-                TARGETS project_name
-                EXPORT project_nameTarget
+                TARGETS CarbonTrinityAudioAPI
+                EXPORT CarbonTrinityAudioAPITarget
                 CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
-                LIBRARY DESTINATION lib/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
-                ARCHIVE DESTINATION lib/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
-                RUNTIME DESTINATION bin/${CCP_PLATFORM}/${CCP_ARCHITECTURE}/${CCP_TOOLSET}/
         )
         # Install rule for available public headers
         install(FILES ${PUBLIC_HEADER_FILES} DESTINATION include)
 
-        configure_ccp_vendor_config_file(
-                TARGET project_name
-                DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/project_nameConfig.cmake"
-                DEPENDENCIES ""
+        configure_file(
+            "${CMAKE_CURRENT_SOURCE_DIR}/CarbonTrinityAudioAPIConfig.cmake.in"
+            "${CMAKE_CURRENT_BINARY_DIR}/CarbonTrinityAudioAPIConfig.cmake"
+            @ONLY
         )
-        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/project_nameConfig.cmake DESTINATION .)
+        
+        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/CarbonTrinityAudioAPIConfig.cmake" 
+                DESTINATION .)
 
         # Install python package
         install(DIRECTORY python/ DESTINATION python
