@@ -152,12 +152,14 @@ if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
         # Install rule for available public headers
         install(FILES ${PUBLIC_HEADER_FILES} DESTINATION include)
 
-        configure_ccp_vendor_config_file(
-                TARGET CarbonTrinityAudioAPI
-                DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/CarbonTrinityAudioAPIConfig.cmake"
-                DEPENDENCIES ""
+        configure_file(
+            "${CMAKE_CURRENT_SOURCE_DIR}/CarbonTrinityAudioAPIConfig.cmake.in"
+            "${CMAKE_CURRENT_BINARY_DIR}/CarbonTrinityAudioAPIConfig.cmake"
+            @ONLY
         )
-        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CarbonTrinityAudioAPIConfig.cmake DESTINATION .)
+        
+        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/CarbonTrinityAudioAPIConfig.cmake" 
+                DESTINATION .)
 
         # Install python package
         install(DIRECTORY python/ DESTINATION python
