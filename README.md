@@ -15,6 +15,8 @@ find_package(CarbonTrinityAudioAPI REQUIRED)
 target_link_libraries(YourTarget INTERFACE CarbonTrinityAudioAPI)
 ```
 
+**NOTE: When adding new methods to the interface with a Blue dependecy, always add them at the bottom of the class**
+
 # Building the default project Locally
 
 1. run after cloning this repository, or any carbon-component, `cd` into it and run `git submodule update --init` 
