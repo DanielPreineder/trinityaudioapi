@@ -16,9 +16,7 @@
 
 BLUE_INTERFACE(ITr2AudEmitter) : public IRoot
 {
-	virtual void ForceCullingStateChange() = 0;
 	virtual void Initialize( const std::string& name, const std::wstring& prefix, const Vector3& position ) = 0;
-
 	virtual int SetPosition( const Vector3& front, const Vector3& top, const Vector3& pos ) = 0;
 	virtual void SetName( const std::string& name ) = 0;
 	virtual void SetPrefix( const std::wstring& prefix ) = 0;
