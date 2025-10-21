@@ -26,10 +26,9 @@ else()
     include(CcpPackageConfigHelpers)
 endif()
 
-set(PUBLIC_HEADER_FILES
-    include/IAudioInputMgr.h
-    include/ITr2AudEmitter.h
-    include/ITr2Audio.h
+file(GLOB PUBLIC_HEADER_FILES 
+    CONFIGURE_DEPENDS
+    "include/*.h"
 )
 
 add_library(CarbonTrinityAudioAPI INTERFACE)

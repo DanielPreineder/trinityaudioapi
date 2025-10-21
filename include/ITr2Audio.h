@@ -7,6 +7,7 @@
 //
 //    Description:
 //      An interface allowing for an abstraction of audio on an asset.
+//      Note: This interface is deprecated. Please use IStretchAudio instead.
 
 #pragma once
 
