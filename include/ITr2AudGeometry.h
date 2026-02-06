@@ -13,6 +13,9 @@
 #ifndef ITr2AudGeometry_h_
 #define ITr2AudGeometry_h_
 
+#include <vector>
+#include <cstdint>
+
 struct Tr2AudGeometryData
 {
 	std::vector<Vector3> m_vertices;

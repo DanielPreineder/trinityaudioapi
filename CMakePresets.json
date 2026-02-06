@@ -86,6 +86,17 @@
         "CMAKE_BUILD_TYPE": "Internal",
         "USE_VCPKG": "OFF"
       }
+    },
+    {
+      "name": "windows_trinitydev",
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "$env{CCP_EVE_PERFORCE_BRANCH_PATH}/vendor/github.com/ccpgames/carbon-trinityaudioapi/development",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "TrinityDev",
+        "USE_VCPKG": "OFF"
+      }
     }
   ]
 }
