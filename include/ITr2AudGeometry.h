@@ -28,15 +28,19 @@ BLUE_INTERFACE( ITr2AudGeometry ) :
 	public IRoot
 {
 	virtual void SetGeometry(
-		uint64_t geometryId,
+		uint64_t geometrySetId,
+		uint64_t instanceId,
 		const Tr2AudGeometryData& geometryData,
 		const Matrix& worldTransform ) = 0;
 
 	virtual void SetGeometryTransform(
-		uint64_t geometryId,
+		uint64_t geometrySetId,
+		uint64_t instanceId,
 		const Matrix& worldTransform ) = 0;
 
-	virtual void RemoveGeometry( uint64_t geometryId ) = 0;
+	virtual void RemoveGeometry(
+		uint64_t geometrySetId,
+		uint64_t instanceId ) = 0;
 };
 
 #endif
