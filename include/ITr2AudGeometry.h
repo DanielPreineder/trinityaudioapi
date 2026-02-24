@@ -4,9 +4,7 @@
 //    Created:   Jan 2026
 //
 //    Description:
-//      An interface intended for use by audio2 to expose relevant functions
-//      related to audio emitters.
-
+//      An interface that sets Geometry (meshes) from trinity to carbon-audio
 
 #pragma once
 
