@@ -1,4 +1,3 @@
-<!-- Copyright (c) 2026 CCP Games -->
 # /src
 
 This folder is where all the tests for the project should be stored, whether they be Python tests or C++ tests.
