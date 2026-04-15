@@ -1,51 +1,22 @@
 cmake_minimum_required(VERSION 3.16)
 project(CarbonTrinityAudioAPI VERSION 1.0.0)
 
-if(NOT DEFINED ENV{CCP_EVE_PERFORCE_BRANCH_PATH})
-    message(FATAL_ERROR "Missing required environment variable CCP_EVE_PERFORCE_BRANCH_PATH")
-elseif(NOT IS_ABSOLUTE $ENV{CCP_EVE_PERFORCE_BRANCH_PATH})
-    message(FATAL_ERROR "CCP_EVE_PERFORCE_BRANCH_PATH needs to be an absolute path")
-elseif(NOT EXISTS $ENV{CCP_EVE_PERFORCE_BRANCH_PATH})
-    message(FATAL_ERROR "CCP_EVE_PERFORCE_BRANCH_PATH is pointing at a non-existing location $ENV{CCP_EVE_PERFORCE_BRANCH_PATH}")
-elseif(NOT IS_DIRECTORY $ENV{CCP_EVE_PERFORCE_BRANCH_PATH})
-    message(FATAL_ERROR "CCP_EVE_PERFORCE_BRANCH_PATH needs to be a directory")
-else()
-    message(STATUS "Using CCP_EVE_PERFORCE_BRANCH_PATH located at $ENV{CCP_EVE_PERFORCE_BRANCH_PATH}")
-endif()
+include(cmake/CcpBuildConfigurations.cmake)
+include(cmake/CcpTargetConfigurations.cmake)
 
-file(TO_CMAKE_PATH "$ENV{CCP_EVE_PERFORCE_BRANCH_PATH}" BRANCH_ROOT_DIR)
-list(INSERT CMAKE_MODULE_PATH 0 ${BRANCH_ROOT_DIR}/cmake)
-
-option(USE_VCPKG OFF)
-
-if(USE_VCPKG)
-    include(cmake/CcpGlobalSettings.cmake)
-    include(cmake/CcpTargetConfigurations.cmake)
-else()
-    include(CcpGlobalSettings)
-    include(CcpPackageConfigHelpers)
-endif()
-
-file(GLOB PUBLIC_HEADER_FILES 
-    CONFIGURE_DEPENDS
-    "include/*.h"
+add_library(CarbonTrinityAudioAPI INTERFACE
+    include/IAudioInputMgr.h
+    include/IStretchAudio.h
+    include/ITr2AudEmitter.h
+    include/ITr2AudGeometry.h
+    include/ITr2Audio.h
 )
-
-add_library(CarbonTrinityAudioAPI INTERFACE)
 
 target_include_directories(CarbonTrinityAudioAPI 
     INTERFACE 
     $<INSTALL_INTERFACE:include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
-
-foreach(header ${PUBLIC_HEADER_FILES})
-    target_sources(CarbonTrinityAudioAPI 
-        INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${header}>
-        $<INSTALL_INTERFACE:${header}>
-    )
-endforeach()
 
 # Provide an install target if this is the top level project only
 if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
@@ -114,57 +85,18 @@ if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
         install(DIRECTORY ${SPHINX_BUILD} DESTINATION documentation)
     endif()
 
-    if(USE_VCPKG)
-        set(INSTALL_BIN_ONLY OFF CACHE BOOL "Do not Install configuration files meant to be read by projects using this project as a dependency (Cmake Config/ header files etc . . .). Set this to ON when installing this component to the perforce vendor folder")
-        if(INSTALL_BIN_ONLY)
-            # Install rule to ensure that our runtime files are in the expected, platform-specific folder
-            install(
-                    TARGETS CarbonTrinityAudioAPI
-                    EXPORT CarbonTrinityAudioAPITarget
-                    CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
-            )
-        else()
-            # Install rule to ensure that our runtime and linker files are in the expected, platform-specific folders
-            install(
-                    TARGETS CarbonTrinityAudioAPI
-                    EXPORT CarbonTrinityAudioAPITarget
-                    CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
-            )
-            # Install rule for available public headers
-            install(DIRECTORY include DESTINATION . FILES_MATCHING PATTERN "*.h")
 
-            install(
-                    EXPORT CarbonTrinityAudioAPITarget
-                    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/CarbonTrinityAudioAPI
-                    FILE CarbonTrinityAudioAPI.cmake)
-            install(
-                    FILES CarbonTrinityAudioAPIConfig.cmake
-                    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/CarbonTrinityAudioAPI)
-        endif()
-    else()
-            # Install rule to ensure that our runtime and linker files are in the expected, platform-specific folders
-        install(
-                TARGETS CarbonTrinityAudioAPI
-                EXPORT CarbonTrinityAudioAPITarget
-                CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
-        )
-        # Install rule for available public headers
-        install(FILES ${PUBLIC_HEADER_FILES} DESTINATION include)
+    # Install rule to ensure that our runtime and linker files are in the expected, platform-specific folders
+    install(
+            TARGETS CarbonTrinityAudioAPI
+            EXPORT CarbonTrinityAudioAPITarget
+            CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
+    )
+    # Install rule for available public headers
+    install(DIRECTORY include DESTINATION . FILES_MATCHING PATTERN "*.h")
 
-        configure_file(
-            "${CMAKE_CURRENT_SOURCE_DIR}/CarbonTrinityAudioAPIConfig.cmake.in"
-            "${CMAKE_CURRENT_BINARY_DIR}/CarbonTrinityAudioAPIConfig.cmake"
-            @ONLY
-        )
-        
-        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/CarbonTrinityAudioAPIConfig.cmake" 
-                DESTINATION .)
-
-        # Install python package
-        install(DIRECTORY python/ DESTINATION python
-                FILES_MATCHING
-                PATTERN "*.py"
-                PATTERN "package.yaml"
-        )
-    endif()
+    install(
+            EXPORT CarbonTrinityAudioAPITarget
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/CarbonTrinityAudioAPI
+            FILE CarbonTrinityAudioAPIConfig.cmake)
 endif()

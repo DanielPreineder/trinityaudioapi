@@ -7,95 +7,170 @@
   },
   "configurePresets": [
     {
-      "name": "carbon_windows_vcpkg_vs",
+      "name": "common",
       "toolchainFile": "${sourceDir}/vendor/github.com/microsoft/vcpkg/scripts/buildsystems/vcpkg.cmake",
-      "binaryDir": "./.cmake-build-${generator}-${presetName}",
-      "generator": "Visual Studio 17 2022",
-      "toolset": {
-        "value": "v141"
+      "binaryDir": "${sourceDir}/.cmake-build-${presetName}",
+      "cacheVariables": {
+        "VCPKG_USE_HOST_TOOLS": "ON",
+        "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/vendor/github.com/carbonengine/vcpkg-registry/triplets"
       },
       "environment": {
-        "INSTALL_PREFIX": "$env{CCP_EVE_PERFORCE_BRANCH_PATH}/vendor/github.com/ccpgames/carbon-trinityaudioapi/development"
+        "VCPKG_ROOT": "${sourceDir}/vendor/github.com/microsoft/vcpkg"
       },
-      "cacheVariables": {
-        "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/cmake/triplets",
-        "VCPKG_TARGET_TRIPLET": "x64-windows-carbon",
-        "USE_VCPKG": "ON",
-        "CMAKE_INSTALL_PREFIX": "$env{INSTALL_PREFIX}"
-      }
+      "hidden": true
     },
     {
-      "name": "carbon_windows_vcpkg_nmc",
-      "toolchainFile": "${sourceDir}/vendor/github.com/microsoft/vcpkg/scripts/buildsystems/vcpkg.cmake",
-      "binaryDir": "./.cmake-build-${generator}-${presetName}",
-      "generator": "Ninja Multi-Config",
-      "environment": {
-        "INSTALL_PREFIX": "$env{CCP_EVE_PERFORCE_BRANCH_PATH}/vendor/github.com/ccpgames/carbon-trinityaudioapi/development"
+      "name": "windows",
+      "inherits": "common",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       },
-      "cacheVariables": {
-        "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/cmake/triplets",
-        "VCPKG_TARGET_TRIPLET": "x64-windows-carbon",
-        "USE_VCPKG": "ON",
-        "CMAKE_INSTALL_PREFIX": "$env{INSTALL_PREFIX}"
-      }
+      "hidden": true
     },
     {
-      "name": "carbon_osx_vcpkg",
-      "toolchainFile": "${sourceDir}/vendor/github.com/microsoft/vcpkg/scripts/buildsystems/vcpkg.cmake",
-      "binaryDir": "./.cmake-build-${generator}-${presetName}",
-      "generator": "Ninja Multi-Config",
-      "environment": {
-        "INSTALL_PREFIX": "$env{CCP_EVE_PERFORCE_BRANCH_PATH}/vendor/github.com/ccpgames/carbon-trinityaudioapi/development"
+      "name": "osx",
+      "inherits": "common",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
       },
-      "cacheVariables": {
-        "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/cmake/triplets",
-        "VCPKG_TARGET_TRIPLET": "arm64-osx-carbon",
-        "USE_VCPKG": "ON",
-        "CMAKE_INSTALL_PREFIX": "$env{INSTALL_PREFIX}"
-      }
+      "hidden": true
     },
     {
-      "name": "windows_debug",
-      "generator": "Visual Studio 17 2022",
-      "architecture": "x64",
-      "binaryDir": "${sourceDir}/out/build/${presetName}",
-      "installDir": "$env{CCP_EVE_PERFORCE_BRANCH_PATH}/vendor/github.com/ccpgames/carbon-trinityaudioapi/development",
+      "name": "x64-windows",
+      "inherits": "windows",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "USE_VCPKG": "OFF"
-      }
+        "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "${sourceDir}/vendor/github.com/carbonengine/vcpkg-registry/toolchains/x64-windows-carbon.cmake"
+      },
+      "hidden": true
     },
     {
-      "name": "windows_release",
-      "generator": "Visual Studio 17 2022",
-      "architecture": "x64",
-      "binaryDir": "${sourceDir}/out/build/${presetName}",
-      "installDir": "$env{CCP_EVE_PERFORCE_BRANCH_PATH}/vendor/github.com/ccpgames/carbon-trinityaudioapi/development",
+      "name": "arm64-osx",
+      "inherits": "osx",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "USE_VCPKG": "OFF"
-      }
+        "CMAKE_OSX_ARCHITECTURES": "arm64",
+        "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "${sourceDir}/vendor/github.com/carbonengine/vcpkg-registry/toolchains/arm64-osx-carbon.cmake"
+      },
+      "hidden": true
     },
     {
-      "name": "windows_internal",
-      "generator": "Visual Studio 17 2022",
-      "architecture": "x64",
-      "binaryDir": "${sourceDir}/out/build/${presetName}",
-      "installDir": "$env{CCP_EVE_PERFORCE_BRANCH_PATH}/vendor/github.com/ccpgames/carbon-trinityaudioapi/development",
+      "name": "x64-osx",
+      "inherits": "osx",
+      "cacheVariables": {
+        "CMAKE_OSX_ARCHITECTURES": "x86_64",
+        "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "${sourceDir}/vendor/github.com/carbonengine/vcpkg-registry/toolchains/x64-osx-carbon.cmake"
+      },
+      "hidden": true
+    },
+    {
+      "name": "x64-windows-internal",
+      "inherits": "x64-windows",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Internal",
-        "USE_VCPKG": "OFF"
+        "VCPKG_TARGET_TRIPLET": "x64-windows-internal",
+        "VCPKG_HOST_TRIPLET": "x64-windows-internal"
       }
     },
     {
-      "name": "windows_trinitydev",
-      "generator": "Visual Studio 17 2022",
-      "architecture": "x64",
-      "binaryDir": "${sourceDir}/out/build/${presetName}",
-      "installDir": "$env{CCP_EVE_PERFORCE_BRANCH_PATH}/vendor/github.com/ccpgames/carbon-trinityaudioapi/development",
+      "name": "x64-windows-release",
+      "inherits": "x64-windows",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "VCPKG_TARGET_TRIPLET": "x64-windows-release",
+        "VCPKG_HOST_TRIPLET": "x64-windows-release"
+      }
+    },
+    {
+      "name": "x64-windows-debug",
+      "inherits": "x64-windows",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "VCPKG_TARGET_TRIPLET": "x64-windows-debug",
+        "VCPKG_HOST_TRIPLET": "x64-windows-debug"
+      }
+    },
+    {
+      "name": "x64-windows-trinitydev",
+      "inherits": "x64-windows",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "TrinityDev",
-        "USE_VCPKG": "OFF"
+        "VCPKG_TARGET_TRIPLET": "x64-windows-trinitydev",
+        "VCPKG_HOST_TRIPLET": "x64-windows-trinitydev"
+      }
+    },
+    {
+      "name": "arm64-osx-internal",
+      "inherits": "arm64-osx",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Internal",
+        "VCPKG_TARGET_TRIPLET": "arm64-osx-internal",
+        "VCPKG_HOST_TRIPLET": "arm64-osx-internal"
+      }
+    },
+    {
+      "name": "arm64-osx-release",
+      "inherits": "arm64-osx",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "VCPKG_TARGET_TRIPLET": "arm64-osx-release",
+        "VCPKG_HOST_TRIPLET": "arm64-osx-release"
+      }
+    },
+    {
+      "name": "arm64-osx-debug",
+      "inherits": "arm64-osx",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "VCPKG_TARGET_TRIPLET": "arm64-osx-debug",
+        "VCPKG_HOST_TRIPLET": "arm64-osx-debug"
+      }
+    },
+    {
+      "name": "arm64-osx-trinitydev",
+      "inherits": "arm64-osx",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "TrinityDev",
+        "VCPKG_TARGET_TRIPLET": "arm64-osx-trinitydev",
+        "VCPKG_HOST_TRIPLET": "arm64-osx-trinitydev"
+      }
+    },
+    {
+      "name": "x64-osx-internal",
+      "inherits": "x64-osx",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Internal",
+        "VCPKG_TARGET_TRIPLET": "x64-osx-internal",
+        "VCPKG_HOST_TRIPLET": "x64-osx-internal"
+      }
+    },
+    {
+      "name": "x64-osx-release",
+      "inherits": "x64-osx",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "VCPKG_TARGET_TRIPLET": "x64-osx-release",
+        "VCPKG_HOST_TRIPLET": "x64-osx-release"
+      }
+    },
+    {
+      "name": "x64-osx-debug",
+      "inherits": "x64-osx",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "VCPKG_TARGET_TRIPLET": "x64-osx-debug",
+        "VCPKG_HOST_TRIPLET": "x64-osx-debug"
+      }
+    },
+    {
+      "name": "x64-osx-trinitydev",
+      "inherits": "x64-osx",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "TrinityDev",
+        "VCPKG_TARGET_TRIPLET": "x64-osx-trinitydev",
+        "VCPKG_HOST_TRIPLET": "x64-osx-trinitydev"
       }
     }
   ]
