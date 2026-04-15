@@ -19,5 +19,6 @@ object Project : Project({
     subProject(Windows.Project)
     subProject(MacOS.Project)
 
-    buildType(PublishToPerforce)
+    // this does not need to be published into the perforce branch
+    // buildType(PublishToPerforce)
 })
