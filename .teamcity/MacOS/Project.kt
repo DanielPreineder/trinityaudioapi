@@ -33,8 +33,8 @@ val x64_Release = CarbonBuildMacOS("Release MacOS x64", "Release", "x64-osx-rele
 object Project : Project({
     id("MacOS")
     name = "macOS"
-
-    buildType(_Self.buildTypes.CreateUniversalBuilds)
+    // This is a header only library, we don't need to do this
+    //buildType(_Self.buildTypes.CreateUniversalBuilds)
 
     buildType(arm64_Debug)
     buildType(arm64_Internal)
