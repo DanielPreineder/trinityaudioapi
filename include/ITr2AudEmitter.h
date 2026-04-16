@@ -3,7 +3,7 @@
 //    Creator:   CCP Team Engine
 //    Created:   April 2020
 //    Modified:  March 2025
-//    Copyright: CCP 2020-2025
+//    Copyright (c) 2026 CCP Games
 //
 //    Description:
 //      An interface intended for use by audio2 to expose relevant functions
