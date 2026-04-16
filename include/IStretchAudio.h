@@ -2,7 +2,7 @@
 //
 //    Creator:   CCP Zoetrope
 //    Created:   April 2025
-//    Copyright: CCP 2025
+//    Copyright (c) 2026 CCP Games
 //
 //    Description:
 //      An interface for audio functionality related to stretch effects.
