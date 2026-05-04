@@ -1,26 +1,25 @@
 # Copyright (c) 2026 CCP Games
 cmake_minimum_required(VERSION 3.16)
-project(CcpCarbonTrinityAudioAPI VERSION 1.0.0)
+project(CarbonTrinityAudioAPI VERSION 2)
 
 include(cmake/CcpBuildConfigurations.cmake)
 include(cmake/CcpTargetConfigurations.cmake)
 
-add_library(CcpCarbonTrinityAudioAPI INTERFACE
-    include/IAudioInputMgr.h
-    include/IStretchAudio.h
-    include/ITr2AudEmitter.h
-    include/ITr2AudGeometry.h
-    include/ITr2Audio.h
-)
+add_library(TrinityAudioAPI INTERFACE)
 
-target_include_directories(CcpCarbonTrinityAudioAPI
-    INTERFACE 
-    $<INSTALL_INTERFACE:include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+target_sources(TrinityAudioAPI INTERFACE
+    FILE_SET HEADERS
+        BASE_DIRS include
+        FILES
+        include/IAudioInputMgr.h
+        include/IStretchAudio.h
+        include/ITr2AudEmitter.h
+        include/ITr2AudGeometry.h
+        include/ITr2Audio.h
 )
 
 # Provide an install target if this is the top level project only
-if(CMAKE_PROJECT_NAME STREQUAL CcpCarbonTrinityAudioAPI)
+if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
     # Determine if/when to generate/build documentation. The rules are as follows:
     # - If running locally - Build documentation is OFF by default
     # - If running on a build agent (TeamCity) - Build documentation is ON by default
@@ -86,18 +85,17 @@ if(CMAKE_PROJECT_NAME STREQUAL CcpCarbonTrinityAudioAPI)
         install(DIRECTORY ${SPHINX_BUILD} DESTINATION documentation)
     endif()
 
-
     # Install rule to ensure that our runtime and linker files are in the expected, platform-specific folders
     install(
-            TARGETS CcpCarbonTrinityAudioAPI
-            EXPORT CcpCarbonTrinityAudioAPITarget
+            TARGETS TrinityAudioAPI
+            EXPORT TrinityAudioAPITarget
             CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
+            FILE_SET HEADERS
     )
-    # Install rule for available public headers
-    install(DIRECTORY include DESTINATION . FILES_MATCHING PATTERN "*.h")
 
     install(
-            EXPORT CcpCarbonTrinityAudioAPITarget
+            EXPORT TrinityAudioAPITarget
             DESTINATION ${CMAKE_INSTALL_PREFIX}/share/CarbonTrinityAudioAPI
+            NAMESPACE Carbon::
             FILE CarbonTrinityAudioAPIConfig.cmake)
 endif()
