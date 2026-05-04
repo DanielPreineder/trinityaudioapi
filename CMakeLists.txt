@@ -94,7 +94,7 @@ if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
 
     install(
             EXPORT TrinityAudioAPITarget
-            NAMESPACE carbon::
+            NAMESPACE Carbon::
             DESTINATION share
             FILE carbon-trinityaudioapi.cmake)
 endif()
