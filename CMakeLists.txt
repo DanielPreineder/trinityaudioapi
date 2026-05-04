@@ -1,6 +1,6 @@
 # Copyright (c) 2026 CCP Games
 cmake_minimum_required(VERSION 3.16)
-project(CarbonTrinityAudioAPI VERSION 2)
+project(CarbonTrinityAudioAPI VERSION 2.0.1)
 
 include(cmake/CcpBuildConfigurations.cmake)
 include(cmake/CcpTargetConfigurations.cmake)
