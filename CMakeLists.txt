@@ -85,7 +85,6 @@ if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
         install(DIRECTORY ${SPHINX_BUILD} DESTINATION documentation)
     endif()
 
-    # Install rule to ensure that our runtime and linker files are in the expected, platform-specific folders
     install(
             TARGETS TrinityAudioAPI
             EXPORT TrinityAudioAPITarget
