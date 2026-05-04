@@ -1,11 +1,11 @@
 # Copyright (c) 2026 CCP Games
 cmake_minimum_required(VERSION 3.16)
-project(CarbonTrinityAudioAPI VERSION 1.0.0)
+project(CcpCarbonTrinityAudioAPI VERSION 1.0.0)
 
 include(cmake/CcpBuildConfigurations.cmake)
 include(cmake/CcpTargetConfigurations.cmake)
 
-add_library(CarbonTrinityAudioAPI INTERFACE
+add_library(CcpCarbonTrinityAudioAPI INTERFACE
     include/IAudioInputMgr.h
     include/IStretchAudio.h
     include/ITr2AudEmitter.h
@@ -13,14 +13,14 @@ add_library(CarbonTrinityAudioAPI INTERFACE
     include/ITr2Audio.h
 )
 
-target_include_directories(CarbonTrinityAudioAPI 
+target_include_directories(CcpCarbonTrinityAudioAPI
     INTERFACE 
     $<INSTALL_INTERFACE:include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 
 # Provide an install target if this is the top level project only
-if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
+if(CMAKE_PROJECT_NAME STREQUAL CcpCarbonTrinityAudioAPI)
     # Determine if/when to generate/build documentation. The rules are as follows:
     # - If running locally - Build documentation is OFF by default
     # - If running on a build agent (TeamCity) - Build documentation is ON by default
@@ -89,15 +89,15 @@ if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
 
     # Install rule to ensure that our runtime and linker files are in the expected, platform-specific folders
     install(
-            TARGETS CarbonTrinityAudioAPI
-            EXPORT CarbonTrinityAudioAPITarget
+            TARGETS CcpCarbonTrinityAudioAPI
+            EXPORT CcpCarbonTrinityAudioAPITarget
             CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
     )
     # Install rule for available public headers
     install(DIRECTORY include DESTINATION . FILES_MATCHING PATTERN "*.h")
 
     install(
-            EXPORT CarbonTrinityAudioAPITarget
+            EXPORT CcpCarbonTrinityAudioAPITarget
             DESTINATION ${CMAKE_INSTALL_PREFIX}/share/CarbonTrinityAudioAPI
             FILE CarbonTrinityAudioAPIConfig.cmake)
 endif()
