@@ -1,13 +1,13 @@
 # Copyright (c) 2026 CCP Games
 cmake_minimum_required(VERSION 3.16)
-project(CarbonTrinityAudioAPI)
+project(CcpTrinityAudioAPI)
 
 include(cmake/CcpBuildConfigurations.cmake)
 include(cmake/CcpTargetConfigurations.cmake)
 
-add_library(TrinityAudioAPI INTERFACE)
+add_library(CcpTrinityAudioAPI INTERFACE)
 
-target_sources(TrinityAudioAPI INTERFACE
+target_sources(CcpTrinityAudioAPI INTERFACE
     FILE_SET HEADERS
         BASE_DIRS include
         FILES
@@ -19,7 +19,7 @@ target_sources(TrinityAudioAPI INTERFACE
 )
 
 # Provide an install target if this is the top level project only
-if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
+if(CMAKE_PROJECT_NAME STREQUAL CcpTrinityAudioAPI)
     # Determine if/when to generate/build documentation. The rules are as follows:
     # - If running locally - Build documentation is OFF by default
     # - If running on a build agent (TeamCity) - Build documentation is ON by default
@@ -86,7 +86,7 @@ if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
     endif()
 
     install(
-            TARGETS TrinityAudioAPI
+            TARGETS CcpTrinityAudioAPI
             EXPORT TrinityAudioAPITarget
             CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
             FILE_SET HEADERS
@@ -94,7 +94,6 @@ if(CMAKE_PROJECT_NAME STREQUAL CarbonTrinityAudioAPI)
 
     install(
             EXPORT TrinityAudioAPITarget
-            NAMESPACE Carbon::
             DESTINATION share
             FILE carbon-trinityaudioapi.cmake)
 endif()
