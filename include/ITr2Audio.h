@@ -1,9 +1,4 @@
-////////////////////////////////////////////////////////////
-//
-//    Creator:   CCP Team Engine
-//    Created:   April 2020
-//    Modified:  March 2025
-//    Copyright (c) 2026 CCP Games
+// Copyright © 2025 CCP ehf.
 //
 //    Description:
 //      An interface allowing for an abstraction of audio on an asset.

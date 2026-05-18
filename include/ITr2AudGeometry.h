@@ -1,7 +1,4 @@
-// Copyright (c) 2026 CCP Games
-//
-//    Creator:   Phevos Rinis
-//    Created:   Jan 2026
+// Copyright © 2026 CCP ehf.
 //
 //    Description:
 //      An interface that sets Geometry (meshes) from trinity to carbon-audio

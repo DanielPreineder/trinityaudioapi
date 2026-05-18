@@ -1,3 +1,4 @@
+// Copyright © 2026 CCP ehf.
 package _Self.buildTypes
 
 import jetbrains.buildServer.configs.kotlin.*
@@ -259,4 +260,4 @@ class Publish(perforce_publish_path: String) : BuildType({
     }
 })
 
-val PublishToPerforce = Publish("vendor/github.com/ccpgames/carbon-template")
+val PublishToPerforce = Publish("vendor/github.com/carbonengine/trinityaudioapi")

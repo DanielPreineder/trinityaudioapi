@@ -1,4 +1,4 @@
-# Copyright (c) 2026 CCP Games
+# Copyright © 2025 CCP ehf.
 cmake_minimum_required(VERSION 3.16)
 project(CcpTrinityAudioAPI)
 
